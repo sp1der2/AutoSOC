@@ -57,3 +57,5 @@ for task in "${tasks[@]}"
 do
     $task
 done
+
+#TEST GIT
