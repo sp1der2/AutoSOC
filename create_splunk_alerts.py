@@ -5,7 +5,7 @@ import xml.etree.ElementTree as ET
 username = input("Entrez votre nom d'utilisateur Splunk : ")
 password = input("Entrez votre mot de passe Splunk : ")
 
-splunk_base_url = "https://localhost:8089"
+splunk_base_url=input("Entrez l'URL de votre instance Splunk : ")
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
