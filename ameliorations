@@ -1,0 +1,9 @@
+# Activer HTTPS au déploiement
+# Script create_splunk_alerts.py
+	# Cacher mot de passe entré par l'utilisateur
+	# Automatiser / Simplifier la création des fichiers d'alertes
+	# Dans l'output, rajouter le nom de l'alerte qui a été créee
+
+
+# Définir et appliquer les Best Practices pour la configuration d'auditd de Florian Roth
+
