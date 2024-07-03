@@ -1,0 +1,62 @@
+---
+- hosts: localhost
+  become: yes
+
+  vars:
+    ansible_host: localhost
+    ansible_port: 2200
+    ansible_user: vagrant  #Cette ligne décommentée fonctionne avec "ansible-playbook"
+    ansible_ssh_private_key_file: .vagrant/machines/Client/virtualbox/private_key #Cette ligne décommentée fonctionne avec "ansible-playbook"
+
+  tasks:
+
+  - name: Fixer le timezone
+    command: timedatectl set-timezone Europe/Paris
+
+  - name: Installation de curl, auditd et rsyslog
+    apt:
+      name:
+        - curl
+        - auditd
+        - rsyslog
+      state: present
+      update_cache: true
+
+  - name: Configuration du fichier /etc/audit/rules.d/audit.rules en ajoutant le logging des commandes tapées par root et les users dont l'uid est sup à 1000
+    lineinfile:
+      path: /etc/audit/rules.d/audit.rules
+      line: "{{item}}"
+      state: present
+    loop:
+      - '-a exit,always -F arch=b64 -S execve -k root-commands'
+      - '-a exit,always -F arch=b64 -S execve -F uid>=1000 -k user-commands'
+
+  - name: Configuration du fichier /etc/rsyslog.conf
+    lineinfile:
+      path: /etc/rsyslog.conf
+      line: "{{item}}"
+      state: present
+    loop:
+      - '# auditd audit.log'
+      - '# Charger le module imfile'
+      - 'module(load="imfile")'
+      - ''
+      - '# Configurer la surveillance du fichier audit.log'
+      - |
+        input(type="imfile"
+        File="/var/log/audit/audit.log"
+        Tag="tag_audit_log:"
+        Severity="info"
+        Facility="local6")
+      - '# Envoyer les logs local6 vers le serveur Splunk via UDP'
+      - 'local6.* @192.168.56.100:5515'
+      #- '*.* @192.168.56.100:5514'
+
+  - name: Redémarrage du service auditd
+    service:
+      name: auditd
+      state: restarted
+  - name: Redémarrage du service rsyslog
+    service:
+      name: rsyslog
+      state: restarted

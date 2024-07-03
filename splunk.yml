@@ -1,0 +1,71 @@
+---
+- hosts: localhost
+  become: yes
+  
+  vars:
+    ansible_host: localhost
+    ansible_port: 2222
+    ansible_user: vagrant
+    ansible_ssh_private_key_file: .vagrant/machines/Splunk/virtualbox/private_key
+    
+  tasks:
+
+  - name: Fixer le timezone
+    command: timedatectl set-timezone Europe/Paris
+
+  - name: Création de l'utilisateur splunk
+    user:
+      name: splunk
+      comment: "Splunk user"
+      shell: /bin/bash
+      createhome: yes
+
+  - name: Vérifier si le répertoire /Splunk existe
+    stat:
+      path: /Splunk
+    register: splunk_dir
+
+  - name: Création du répertoire /Splunk s'il n'existe pas
+    file:
+      path: /Splunk
+      state: directory
+      mode: '0755'
+    when: not splunk_dir.stat.exists
+
+  - name: Installation de curl
+    apt:
+      name: curl
+      state: present
+      
+  - name: Téléchargement de Splunk
+    get_url:
+      url: https://download.splunk.com/products/splunk/releases/9.2.1/linux/splunk-9.2.1-78803f08aabb-Linux-x86_64.tgz
+      dest: /Splunk/splunk.tgz
+
+  - name: Dépaquetage de l'archive Splunk
+    ansible.builtin.unarchive:
+      src: /Splunk/splunk.tgz
+      dest: /Splunk
+      remote_src: yes
+      creates: /Splunk/splunk/bin/splunk
+
+  - name: Changement de propriétaire du dossier /Splunk
+    file:
+      path: /Splunk/splunk
+      owner: splunk
+      group: splunk
+      recurse: yes
+      
+  - name: Configuration de splunk
+    command: /Splunk/splunk/bin/splunk enable boot-start -user splunk --accept-license --seed-passwd P@ssw0rd!
+
+  - name: Démarrage de splunk
+    command: /Splunk/splunk/bin/splunk start --no-prompt
+
+  - name: Création d'un index "Client"
+    command: sudo -u splunk /Splunk/splunk/bin/splunk add index Client -auth admin:P@ssw0rd!
+
+  - name: Configuration entrée de données UDP/5514 pour réception des logs auditd
+    command: sudo -u splunk /Splunk/splunk/bin/splunk add udp 5514 -sourcetype syslog -host 192.168.56.50 -auth admin:P@ssw0rd!
+  - name: Configuration entrée de données UDP/5515
+    command: sudo -u splunk /Splunk/splunk/bin/splunk add udp 5515 -sourcetype linux_audit -host 192.168.56.50 -auth admin:P@ssw0rd!
