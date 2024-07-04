@@ -1,71 +1,97 @@
 ---
-- hosts: localhost
+- hosts: Splunk
   become: yes
   
   vars:
-    ansible_host: localhost
-    ansible_port: 2222
+    ansible_host: Splunk
     ansible_user: vagrant
-    ansible_ssh_private_key_file: .vagrant/machines/Splunk/virtualbox/private_key
+    ansible_ssh_private_key_file: .ssh/splunk_private_key
     
   tasks:
 
-  - name: Fixer le timezone
+  - name: Timezone fix [FR]
     command: timedatectl set-timezone Europe/Paris
 
-  - name: Création de l'utilisateur splunk
+  - name: Creating user splunk
     user:
       name: splunk
       comment: "Splunk user"
       shell: /bin/bash
       createhome: yes
 
-  - name: Vérifier si le répertoire /Splunk existe
+  - name: Check if /Splunk exists
     stat:
       path: /Splunk
     register: splunk_dir
 
-  - name: Création du répertoire /Splunk s'il n'existe pas
+  - name: Create /Splunk directory if not exists
     file:
       path: /Splunk
       state: directory
       mode: '0755'
     when: not splunk_dir.stat.exists
 
-  - name: Installation de curl
+  - name: System tools installation
     apt:
-      name: curl
+      name:
+        - curl
+        - unzip
+        - tar
+        - pip
       state: present
+      update_cache: true
       
-  - name: Téléchargement de Splunk
+  - name: Downloading Splunk...
     get_url:
-      url: https://download.splunk.com/products/splunk/releases/9.2.1/linux/splunk-9.2.1-78803f08aabb-Linux-x86_64.tgz
-      dest: /Splunk/splunk.tgz
+      url: "https://download.splunk.com/products/splunk/releases/9.2.2/linux/splunk-9.2.2-d76edf6f0a15-Linux-x86_64.tgz"
+      dest: /Splunk/splunk-9.2.2-d76edf6f0a15-Linux-x86_64.tgz
+      checksum: md5:da10ab0199358aa96b3a29420a9d5f4b
 
-  - name: Dépaquetage de l'archive Splunk
+  - name: Unpack Splunk archive
     ansible.builtin.unarchive:
-      src: /Splunk/splunk.tgz
+      src: /Splunk/splunk-9.2.2-d76edf6f0a15-Linux-x86_64.tgz
       dest: /Splunk
       remote_src: yes
       creates: /Splunk/splunk/bin/splunk
 
-  - name: Changement de propriétaire du dossier /Splunk
+  - name: Changing /Splunk owner
     file:
       path: /Splunk/splunk
       owner: splunk
       group: splunk
       recurse: yes
       
-  - name: Configuration de splunk
+  - name: Configuration of Splunk
     command: /Splunk/splunk/bin/splunk enable boot-start -user splunk --accept-license --seed-passwd P@ssw0rd!
 
-  - name: Démarrage de splunk
+  - name: Starting Splunk
     command: /Splunk/splunk/bin/splunk start --no-prompt
 
-  - name: Création d'un index "Client"
-    command: sudo -u splunk /Splunk/splunk/bin/splunk add index Client -auth admin:P@ssw0rd!
+  - name: Create index named "Clients"
+    command: sudo -u splunk /Splunk/splunk/bin/splunk add index Clients -auth admin:P@ssw0rd!
 
-  - name: Configuration entrée de données UDP/5514 pour réception des logs auditd
+  - name: Configure UDP/5514 reception for "Auditd" logs
     command: sudo -u splunk /Splunk/splunk/bin/splunk add udp 5514 -sourcetype syslog -host 192.168.56.50 -auth admin:P@ssw0rd!
-  - name: Configuration entrée de données UDP/5515
+
+  - name: Configure UDP/5515 reception for "Syslog" logs
     command: sudo -u splunk /Splunk/splunk/bin/splunk add udp 5515 -sourcetype linux_audit -host 192.168.56.50 -auth admin:P@ssw0rd!
+
+  - name: Enabling HTTPS
+    command: sudo -u splunk /Splunk/splunk/bin/splunk enable web-ssl -auth admin:P@ssw0rd!
+  
+  - name: Restarting Splunk
+    command: sudo -u splunk /Splunk/splunk/bin/splunk restart
+
+  - name: Pushing alerts archive
+    ansible.builtin.copy:
+      src: ./alerts.zip
+      dest: /Splunk/alerts.zip
+      mode: '0755'
+
+  - name: Unzipping alerts.zip
+    ansible.builtin.unarchive:
+      src: alerts.zip
+      dest: /Splunk
+
+  - name: Launching create_splunk_alerts.py
+    script: ./create_splunk_alerts.py
