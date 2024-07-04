@@ -1,10 +1,19 @@
-import requests, urllib3, json, os, getpass
+#!/usr/bin/env python3
+
+import requests, urllib3, json, os
 import xml.etree.ElementTree as ET
 
+#green and red colors for output
+class color:
+    GREEN = '\033[92m'
+    RED = '\033[91m'
+    ENDC = '\033[0m'
+
 # Credentials & server informations 
-username = input("Enter your Splunk username : ")
-splunk_password = getpass.getpass("Enter your Splunk password : ")
-splunk_base_url=input("Enter your Splunk URL : ")
+
+splunk_base_url = 'https://192.168.56.100:8089'
+username = 'admin'
+password = 'P@ssw0rd!'
 
 # Disable SSL warnings
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -17,6 +26,7 @@ auth_data = {
     'password': password
 }
 
+#Authentication request
 response = requests.post(auth_url, data=auth_data, verify=False)
 
 #Parsing HTTP response in order to find the session key
@@ -30,15 +40,16 @@ headers = {
 }
 #Function to create alerts and send them to Splunk
 def create_alert():
-    for fichier in os.listdir('./alerts'): # Browsing each file in the alerts folder
-        with open('./alerts/' + fichier, 'r') as f: #Open each alert on RO 
+    for fichier in os.listdir('/Splunk/alerts/'): # Browsing each file in the alerts folder
+        alt_name = fichier.split('.')[0] # Extract the alert name from the file name
+        with open('/Splunk/alerts/' + fichier, 'r') as f: #Open each alert file in read mode
             alert_actions = json.load(f) # Load the alert in JSON format
             response = requests.post(f'{splunk_base_url}/services/saved/searches', headers=headers, data=alert_actions, verify=False) #Send POST request to save alert in Splunk
             if response.status_code == 201: #Check if alert has been successfully created
-                print('[SUCCESS] Alert has been successfully created !')
+                print(color.GREEN + '[SUCCESS] Alert : ', alt_name, 'has been successfully created !')
                 f.close()
             else:
-                print('[FAIL] Alert cannot be created...')
+                print(color.RED + '[FAIL] Alert : ', alt_name, 'cannot be created...')
                 f.close()
 
 create_alert()
