@@ -1,19 +1,18 @@
 ---
-- hosts: localhost
+- hosts: Client
   become: yes
 
   vars:
-    ansible_host: localhost
-    ansible_port: 2200
-    ansible_user: vagrant  #Cette ligne décommentée fonctionne avec "ansible-playbook"
-    ansible_ssh_private_key_file: .vagrant/machines/Client/virtualbox/private_key #Cette ligne décommentée fonctionne avec "ansible-playbook"
+    ansible_host: Client
+    ansible_user: vagrant 
+    ansible_ssh_private_key_file: .ssh/client_private_key
 
   tasks:
 
-  - name: Fixer le timezone
+  - name: Timezone fix [FR]
     command: timedatectl set-timezone Europe/Paris
 
-  - name: Installation de curl, auditd et rsyslog
+  - name: System tools installation
     apt:
       name:
         - curl
