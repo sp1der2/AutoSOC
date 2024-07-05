@@ -29,7 +29,7 @@ Vagrant.configure("2") do |config|
     # 3rd VM : Ansible Control Node
     config.vm.define "ansible.srv" do |c|
         c.vm.box = "debian/bookworm64"
-        c.vm.hostname = "ansible_srv"
+        c.vm.hostname = "srv_ansible"
         c.vm.network "private_network", ip: "192.168.56.10", virtualbox__intnet: true
         c.vm.provider "virtualbox" do |v|
             v.memory = 512
