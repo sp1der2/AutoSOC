@@ -42,6 +42,7 @@ Vagrant.configure("2") do |config|
         c.vm.provision "file", source: "splunk.yml", destination: "/home/vagrant/splunk.yml"
         c.vm.provision "file", source: "logs_forwarder.yaml", destination: "/home/vagrant/logs_forwarder.yaml"
         c.vm.provision "file", source: "alerts.zip", destination: "/home/vagrant/alerts.zip"
+        c.vm.provision "file", source: "create_splunk_alerts.py", destination: "/home/vagrant/create_splunk_alerts.py"
         c.vm.provision "shell", inline: <<-SHELL
             sudo echo "192.168.56.100 splunk" >> /etc/hosts
             sudo echo "192.168.56.50 client" >> /etc/hosts
