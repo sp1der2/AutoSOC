@@ -43,16 +43,6 @@ Vagrant.configure("2") do |config|
         c.vm.provision "file", source: "logs_forwarder.yaml", destination: "/home/vagrant/logs_forwarder.yaml"
         c.vm.provision "file", source: "alerts.zip", destination: "/home/vagrant/alerts.zip"
         c.vm.provision "file", source: "create_splunk_alerts.py", destination: "/home/vagrant/create_splunk_alerts.py"
-        c.vm.provision "shell", inline: <<-SHELL
-            sudo echo "192.168.56.100 splunk" >> /etc/hosts
-            sudo echo "192.168.56.50 client" >> /etc/hosts
-            sudo apt-get update && sudo apt-get install unzip pipx -y
-            unzip alerts.zip 
-            sudo -u vagrant pipx install ansible-core
-            export PATH=$PATH:/home/vagrant/.local/bin
-            source .bashrc
-            ansible-playbook -i inventory.ini -l splunk splunk.yml
-            ansible-playbook -i inventory.ini -l client logs_forwarder.yaml
-        SHELL
+        c.vm.provision "shell", path: "ansible_provisionning.sh"
     end
 end
