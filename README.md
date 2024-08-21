@@ -1,58 +1,53 @@
 # AutoSOC
 
-AutoSOC est un projet visant à fournir un environnement de laboratoire pour les équipes de sécurité (Blue Team) afin de s'entraîner à détecter des menaces en utilisant un SIEM (Splunk) et un serveur web vulnérable. Ce laboratoire est conçu pour être déployé rapidement à l'aide de Vagrant, et permet aux utilisateurs de simuler des attaques, puis de surveiller et d'analyser les événements à l'aide de Splunk.
+AutoSOC is a project aimed at providing a lab environment for security teams (Blue Team) to practice threat detection using a SIEM (Splunk) and a vulnerable web server. This lab is designed to be quickly deployed using Vagrant, allowing users to simulate attacks and then monitor and analyze events using Splunk.
 
-## Architecture du laboratoire
+## Lab Architecture
 
-Le laboratoire AutoSOC se compose de trois machines virtuelles (VM) gérées par Vagrant :
+The AutoSOC lab consists of three virtual machines (VMs) managed by Vagrant:
 
-1. **VM Splunk** : Cette machine virtuelle héberge une instance de Splunk qui collecte et analyse les données de journalisation.
-2. **VM Serveur Web Vulnérable** : Ce serveur web délibérément vulnérable est conçu pour simuler des failles de sécurité courantes, permettant aux équipes de tester leurs compétences en détection et réponse aux incidents.
-3. **VM Serveur Ansible** : Cette machine virtuelle agit comme un serveur Ansible, utilisé pour orchestrer les déploiements et configurations des autres VMs.
+1. **Splunk VM**: This virtual machine hosts a Splunk instance that collects and analyzes log data.
+2. **Vulnerable Web Server VM**: This intentionally vulnerable web server is designed to simulate common security flaws, allowing teams to test their detection and incident response skills.
+3. **Ansible Server VM**: This virtual machine acts as an Ansible server, used to orchestrate the deployment and configuration of the other VMs.
 
 ## Installation
 
-Pour installer et configurer l'environnement AutoSOC, suivez les étapes ci-dessous :
+To install and configure the AutoSOC environment, follow the steps below:
 
-### Prérequis
+### Prerequisites
 
-Assurez-vous d'avoir les logiciels suivants installés sur votre machine :
+Ensure you have the following software installed on your machine:
 
 - [Vagrant](https://www.vagrantup.com/downloads)
-- [VirtualBox](https://www.virtualbox.org/wiki/Downloads) (ou tout autre fournisseur de VM compatible avec Vagrant)
+- [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 
-### Étapes d'installation
+### Installation Steps
 
-1. Clonez le dépôt AutoSOC depuis GitHub :
+1. Clone the AutoSOC repository from GitHub:
 
     ```bash
-    git clone https://github.com/votreutilisateur/AutoSOC.git
+    git clone https://github.com/sp1der2/AutoSOC.git
     cd AutoSOC
     ```
 
-2. Exécutez le script d'installation :
+2. Run the setup script:
 
     ```bash
+    chmod +x setup.sh
     ./setup.sh
     ```
 
-    Ce script va configurer Vagrant et lancer les trois machines virtuelles.
+    This script will configure Vagrant and launch the three virtual machines.
 
-3. Patientez pendant la création et la configuration des machines virtuelles. Une fois le processus terminé, vous aurez accès à l'interface web de Splunk pour commencer à travailler.
+## Usage
 
-## Utilisation
+- Access the Splunk interface at: `http://localhost:8000`
+- Check the end of setup.sh in order to see credentials to log in
 
-- Accédez à l'interface Splunk à l'adresse : `http://localhost:8000`
-- Utilisez les journaux collectés pour détecter et analyser les activités suspectes provenant du serveur web vulnérable.
+## License
 
-## Contribution
-
-Les contributions sont les bienvenues ! Pour proposer des améliorations, des correctifs, ou de nouvelles fonctionnalités, veuillez soumettre une pull request ou ouvrir une issue sur GitHub.
-
-## Licence
-
-Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
 
 ---
 
-**Note** : Ce projet est destiné uniquement à des fins éducatives et de formation. N'utilisez pas ce laboratoire sur des systèmes en production.
+**Note**: This project is intended for educational and training purposes only. Do not use this lab on production systems.
