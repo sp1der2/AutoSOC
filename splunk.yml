@@ -43,9 +43,9 @@
       
   - name: Downloading Splunk...
     get_url:
-      url: "https://download.splunk.com/products/splunk/releases/9.2.2/linux/splunk-9.2.2-d76edf6f0a15-Linux-x86_64.tgz"
+      url: "https://download.splunk.com/products/splunk/releases/9.3.0/linux/splunk-9.3.0-51ccf43db5bd-Linux-x86_64.tgz"
       dest: /Splunk/splunk-9.2.2-d76edf6f0a15-Linux-x86_64.tgz
-      checksum: md5:da10ab0199358aa96b3a29420a9d5f4b
+      checksum: md5:4af760d0a95b54965f1c8cc6ec838956
 
   - name: Unpack Splunk archive
     ansible.builtin.unarchive:
@@ -75,6 +75,9 @@
 
   - name: Configure UDP/5515 reception for "Syslog" logs
     command: sudo -u splunk /Splunk/splunk/bin/splunk add udp 5515 -sourcetype linux_audit -host 192.168.56.50 -auth admin:P@ssw0rd!
+
+  - name: Configure UDP/5516 reception for NGINX logs
+    command: sudo -u splunk /Splunk/splunk/bin/splunk add udp 5516 -sourcetype access_combined -host 192.168.56.50 -auth admin:P@ssw0rd!
 
   - name: Enabling HTTPS
     command: sudo -u splunk /Splunk/splunk/bin/splunk enable web-ssl -auth admin:P@ssw0rd!
