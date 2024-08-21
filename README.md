@@ -48,7 +48,7 @@ Ensure you have the following software installed on your machine:
 ## Usage
 
 - Access the Splunk interface at: `https://localhost:8000`
-- Check the end of setup.sh in order to see credentials to log in
+- Use credentials admin / P@ssw0rd! to log into Splunk
 
 ## License
 
