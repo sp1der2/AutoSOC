@@ -3,7 +3,6 @@
   become: yes
 
   vars:
-
     ansible_user: vagrant
     ansible_ssh_private_key_file: .ssh/client_private_key
     timezone: "Europe/Paris"
@@ -13,54 +12,59 @@
     splunk_port: "5515"
 
   tasks:
+    - name: Set timezone
+      ansible.builtin.command: "timedatectl set-timezone {{ timezone }}"
 
-  - name: Set timezone
-    ansible.builtin.command: "timedatectl set-timezone {{ timezone }}"
+    - name: Install system tools
+      ansible.builtin.package:
+        name:
+          - curl
+          - auditd
+          - rsyslog
+          - apache2
+        state: present
+        update_cache: yes
 
-  - name: Install system tools
-    ansible.builtin.package:
-      name:
-        - curl
-        - auditd
-        - rsyslog
-      state: present
-      update_cache: yes
+    - name: Configure audit rules
+      ansible.builtin.lineinfile:
+        path: "{{ audit_rules_path }}"
+        line: "{{ item }}"
+        state: present
+      loop:
+        - '-a exit,always -F arch=b64 -S execve -k root-commands'
+        - '-a exit,always -F arch=b64 -S execve -F uid>=1000 -k user-commands'
 
-  - name: Configure audit rules
-    ansible.builtin.lineinfile:
-      path: "{{ audit_rules_path }}"
-      line: "{{ item }}"
-      state: present
-    loop:
-      - '-a exit,always -F arch=b64 -S execve -k root-commands'
-      - '-a exit,always -F arch=b64 -S execve -F uid>=1000 -k user-commands'
+    - name: Configure rsyslog
+      ansible.builtin.blockinfile:
+        path: "{{ rsyslog_conf_path }}"
+        block: |
+          # auditd audit.log
+          # Loading module imfile
+          module(load="imfile")
 
-  - name: Configure rsyslog
-    ansible.builtin.lineinfile:
-      path: "{{ rsyslog_conf_path }}"
-      line: "{{ item }}"
-      state: present
-    loop:
-        - '# auditd audit.log'
-        - '# Loading module imfile'
-        - 'module(load="imfile")'
-        - ''
-        - |
           # Configure monitoring of file audit.log
           input(type="imfile"
-          File="/var/log/audit/audit.log"
-          Tag="tag_audit_log:"
-          Severity="info"
-          Facility="local6")
-        - "# Send local6 logs to Splunk (UDP/5515)"
-        - "local6.* @{{ splunk_server }}:{{ splunk_port }}"
+                File="/var/log/audit/audit.log"
+                Tag="auditd"
+                Facility="local6")
 
-  - name: Restart auditd service
-    ansible.builtin.service:
-      name: auditd
-      state: restarted
+          # Send local6 logs to Splunk (UDP/5515)
+          local6.* @{{ splunk_server }}:{{ splunk_port }}
 
-  - name: Restart rsyslog service
-    ansible.builtin.service:
-      name: rsyslog
-      state: restarted
+          input(type="imfile"
+                File="/var/log/apache2/access.log"
+                Tag="apache-access"
+                Facility="local7")
+
+          # Send NGINX logs to Splunk on UDP/5516
+          local7.* @192.168.56.100:5516
+
+    - name: Restart auditd service
+      ansible.builtin.service:
+        name: auditd
+        state: restarted
+
+    - name: Restart rsyslog service
+      ansible.builtin.service:
+        name: rsyslog
+        state: restarted
