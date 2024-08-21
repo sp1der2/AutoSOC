@@ -18,6 +18,7 @@ Vagrant.configure("2") do |config|
         c.vm.box = "debian/bookworm64"
         c.vm.hostname = "client"
         c.vm.network "private_network", ip: "192.168.56.50", virtualbox__intnet: true
+        c.vm.network "forwarded_port", guest: 80, host: 8080, protocol: "tcp"
         c.vm.provider "virtualbox" do |v|
             v.memory = 1024
             v.cpus = 1
@@ -32,7 +33,7 @@ Vagrant.configure("2") do |config|
         c.vm.hostname = "provisionner"
         c.vm.network "private_network", ip: "192.168.56.10", virtualbox__intnet: true
         c.vm.provider "virtualbox" do |v|
-            v.memory = 512
+            v.memory = 1024
             v.cpus = 1
         end
         c.vm.synced_folder ".", "/vagrant", disabled: true
