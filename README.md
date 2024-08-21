@@ -47,7 +47,7 @@ Ensure you have the following software installed on your machine:
 
 ## Usage
 
-- Access the Splunk interface at: `http://localhost:8000`
+- Access the Splunk interface at: `https://localhost:8000`
 - Check the end of setup.sh in order to see credentials to log in
 
 ## License
