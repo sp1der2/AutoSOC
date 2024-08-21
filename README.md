@@ -1,3 +1,9 @@
+![autosoc logo](https://github.com/user-attachments/assets/0a8e34a0-bb29-479c-ac7a-1bb0067745ef)
+
+        
+Made with ❤️ by AI
+
+
 # AutoSOC
 
 AutoSOC is a project aimed at providing a lab environment for security teams (Blue Team) to practice threat detection using a SIEM (Splunk) and a vulnerable web server. This lab is designed to be quickly deployed using Vagrant, allowing users to simulate attacks and then monitor and analyze events using Splunk.
