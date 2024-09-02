@@ -45,6 +45,9 @@ Ensure you have Vagrant & Virtualbox installed :
 - After deployment, access the Splunk interface at: `https://localhost:8000`
 - Use credentials admin / P@ssw0rd! to log into Splunk
 
+## SSH to VMs
+Go to AutoSOC directory and type in a terminal `vagrant ssh splunk` or `vagrant ssh client`.
+
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
