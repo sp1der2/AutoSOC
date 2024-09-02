@@ -16,10 +16,13 @@ AutoSOC is a project aimed at providing a lab environment for security teams (Bl
 
 ### Prerequisites
 
-Ensure you have the following software installed on your machine:
+6 vCPUs / 5 Go RAM
+
+Ensure you have Vagrant & Virtualbox installed : 
 
 - [Vagrant](https://www.vagrantup.com/downloads)
 - [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
+
 
 ### Installation Steps
 
