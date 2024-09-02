@@ -7,7 +7,7 @@ Vagrant.configure("2") do |config|
         c.vm.network "forwarded_port", guest: 8089, host: 8089, protocol: "tcp"
         c.vm.network "private_network", ip: "192.168.56.100", virtualbox__intnet: true
         c.vm.provider "virtualbox" do |v|
-            v.memory = 8192
+            v.memory = 4096
             v.cpus = 4
         end
         c.vm.synced_folder ".", "/vagrant", disabled: true
@@ -20,7 +20,7 @@ Vagrant.configure("2") do |config|
         c.vm.network "private_network", ip: "192.168.56.50", virtualbox__intnet: true
         c.vm.network "forwarded_port", guest: 80, host: 8080, protocol: "tcp"
         c.vm.provider "virtualbox" do |v|
-            v.memory = 1024
+            v.memory = 512
             v.cpus = 1
         end
         c.vm.synced_folder ".", "/vagrant", disabled: true
@@ -33,7 +33,7 @@ Vagrant.configure("2") do |config|
         c.vm.hostname = "provisionner"
         c.vm.network "private_network", ip: "192.168.56.10", virtualbox__intnet: true
         c.vm.provider "virtualbox" do |v|
-            v.memory = 1024
+            v.memory = 512
             v.cpus = 1
         end
         c.vm.synced_folder ".", "/vagrant", disabled: true
