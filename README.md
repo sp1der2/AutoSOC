@@ -15,11 +15,10 @@ AutoSOC is a project aimed at providing a lab environment for security teams (Bl
 3. **Ansible Server VM**: This virtual machine acts as an Ansible server, used to orchestrate the deployment and configuration of the other VMs.
 
 ### Prerequisites
+Hardware :
+~ 6 vCPUs / 5 Go RAM
 
-6 vCPUs / 5 Go RAM
-
-Ensure you have Vagrant & Virtualbox installed : 
-
+Software : 
 - [Vagrant](https://www.vagrantup.com/downloads)
 - [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 
