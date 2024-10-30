@@ -20,7 +20,7 @@ Hardware :
 
 Software : 
 - [Vagrant](https://www.vagrantup.com/downloads)
-- [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
+- [VirtualBox 7.0 (as 7.1 isn't supported yet by Vagrant)](https://www.virtualbox.org/wiki/Downloads)
 
 
 ### Installation Steps
