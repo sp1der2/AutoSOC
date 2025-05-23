@@ -1,0 +1,57 @@
+networks:
+  splunknet:
+    driver: bridge
+    attachable: true
+
+services:
+  dvwa:
+    networks:
+      splunknet:
+        aliases:
+          - dvwa
+    image: sagikazarmark/dvwa
+    depends_on:
+      so1:
+        condition: service_healthy
+    logging:
+      driver: splunk
+      options:
+        splunk-token: "3bcf1781-211b-4c0d-8f49-5347d982b92d"
+        splunk-url: "https://172.18.0.2:8088"
+        splunk-index: "main"
+        splunk-sourcetype: "access_combined"
+        splunk-insecureskipverify: "true" # Only if self-certificate used
+        tag: "dvwa-container"
+    hostname: dvwa
+    container_name: dvwa
+    environment:
+      - TZ=Europe/Paris
+    ports: 
+    - 8080:80
+
+  so1:
+    networks:
+      splunknet:
+        aliases:
+          - so1
+    image: ${SPLUNK_IMAGE:-splunk/splunk:latest}
+    hostname: so1
+    container_name: so1
+    environment:
+      - TZ=Europe/Paris
+      - SPLUNK_START_ARGS=--accept-license
+      - SPLUNK_STANDALONE_URL=so1
+      - SPLUNK_HEC_TOKEN=3bcf1781-211b-4c0d-8f49-5347d982b92d
+      - SPLUNK_PASSWORD=getdm31v37tf3dsqxnje9yzq05ax7vj9s9x5
+      - SPLUNK_BEFORE_START_CMD=enable web-ssl -auth admin:getdm31v37tf3dsqxnje9yzq05ax7vj9s9x5
+      - SPLUNK_ADD=udp 514 -sourcetype linux_audit,udp 5515 -sourcetype syslog,tcp 5520 -sourcetype access_combined
+    # volumes:
+    #   - docker-splunk-etc:/opt/splunk/etc
+    #   - docker-splunk-var:/opt/splunk/var
+    restart: on-failure:1
+    ports:
+      - 8888:8000
+      - 8089
+# volumes:
+#   docker-splunk-etc:
+#   docker-splunk-var:
