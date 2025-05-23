@@ -1,7 +1,7 @@
 ![autosoc logo](https://github.com/user-attachments/assets/0a8e34a0-bb29-479c-ac7a-1bb0067745ef)
 
         
-Made with ❤️ by AI
+                                                                                Logo made with ❤️ by AI
 
 
 # AutoSOC
@@ -10,42 +10,21 @@ AutoSOC is a project aimed at providing a lab environment for security teams (Bl
 
 # Architecture
 
-1. **Splunk VM**: This virtual machine hosts a Splunk instance that collects and analyzes log data.
-2. **Vulnerable Web Server VM**: This intentionally vulnerable web server is designed to simulate common security flaws, allowing teams to test their detection and incident response skills.
-3. **Ansible Server VM**: This virtual machine acts as an Ansible server, used to orchestrate the deployment and configuration of the other VMs.
-
-### Prerequisites
-Hardware :
-~ 6 vCPUs / 5 Go RAM
-
-Software : 
-- [Vagrant](https://www.vagrantup.com/downloads)
-- [VirtualBox 7.0 (as 7.1 isn't supported yet by Vagrant)](https://www.virtualbox.org/wiki/Downloads)
-
+1. **Splunk Container**: Collect and analyze log data.
+2. **DVWA**: Vulnerable Web App.
 
 ### Installation Steps
 
-1. Clone the AutoSOC repository from GitHub:
+1. Just launch the compose file in your terminal :
 
     ```bash
-    git clone https://github.com/sp1der2/AutoSOC.git
-    cd AutoSOC
-    ```
-
-2. Run the setup script:
-
-    ```bash
-    chmod +x setup.sh
-    ./setup.sh
+    cd AutoSOC && sudo docker compose up -d
     ```
 
 ## Usage
 
-- After deployment, access the Splunk interface at: `https://localhost:8000`
-- Use credentials admin / P@ssw0rd! to log into Splunk
-
-## SSH to VMs
-Go to AutoSOC directory and type in a terminal `vagrant ssh splunk` or `vagrant ssh client`.
+- After deployment, access the Splunk interface at: `https://localhost:8888`
+- Credentials are available in the docker compose file.
 
 ## License
 
