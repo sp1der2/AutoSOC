@@ -1,7 +1,7 @@
-![autosoc logo](https://github.com/user-attachments/assets/0a8e34a0-bb29-479c-ac7a-1bb0067745ef)
+                                        ![autosoc logo](https://github.com/user-attachments/assets/0a8e34a0-bb29-479c-ac7a-1bb0067745ef)
 
         
-Logo made with ❤️ by AI
+                                        Logo made with ❤️ by AI
 
 
 # AutoSOC
