@@ -19,7 +19,7 @@ AutoSOC is a project aimed at providing a lab environment for security teams (Bl
 1. Just launch the compose file in your terminal :
 
     ```bash
-    cd AutoSOC && sudo docker compose up -d
+    git clone https://github.com/sp1der2/AutoSOC && cd AutoSOC && sudo docker compose up -d
     ```
 
 ## Usage
