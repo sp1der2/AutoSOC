@@ -17,7 +17,7 @@ services:
       driver: splunk
       options:
         splunk-token: "3bcf1781-211b-4c0d-8f49-5347d982b92d"
-        splunk-url: "https://172.18.0.2:8088"
+        splunk-url: "https://so1:8088"
         splunk-index: "main"
         splunk-sourcetype: "access_combined"
         splunk-insecureskipverify: "true" # Only if self-certificate used
