@@ -16,7 +16,9 @@ AutoSOC is a project aimed at providing a lab environment for security teams (Bl
 
 ### Installation Steps
 
-1. Just clone the repo and launch the compose file in your terminal :
+1. Add the container IP to your /etc/hosts
+
+2. Just clone the repo and launch the compose file in your terminal :
 
     ```bash
     git clone https://github.com/sp1der2/AutoSOC && cd AutoSOC && sudo docker compose up -d
