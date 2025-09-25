@@ -40,6 +40,7 @@ services:
     environment:
       - TZ=Europe/Paris
       - SPLUNK_START_ARGS=--accept-license
+      - SPLUNK_GENERAL_TERMS=--accept-sgt-current-at-splunk-com
       - SPLUNK_STANDALONE_URL=so1
       - SPLUNK_HEC_TOKEN=3bcf1781-211b-4c0d-8f49-5347d982b92d
       - SPLUNK_PASSWORD=getdm31v37tf3dsqxnje9yzq05ax7vj9s9x5
