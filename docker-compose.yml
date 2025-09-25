@@ -52,7 +52,7 @@ services:
     restart: on-failure:1
     ports:
       - 8888:8000
-      - 8089
+      - 8088:8088
 # volumes:
 #   docker-splunk-etc:
 #   docker-splunk-var:
