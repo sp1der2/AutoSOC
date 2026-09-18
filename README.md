@@ -11,6 +11,9 @@ AutoSOC is a project aimed at providing a lab environment for security teams (Bl
 1. **Splunk Container**: Collect and analyze log data.
 2. **DVWA**: Vulnerable Web App.
 
+## Requirements
+- Docker
+
 ### Installation
 
 1. Just clone the repo and launch the compose file in your terminal :
