@@ -4,7 +4,7 @@
 
 # AutoSOC
 
-AutoSOC is a project aimed at providing a lab environment for security teams (Blue Team) to practice threat detection using a SIEM (Splunk) and a vulnerable web server. This lab is designed to be quickly deployed using Docker, allowing users to simulate attacks and then monitor and analyze events using Splunk.
+AutoSOC provides a lab environment for Blue Teams to practice threat detection using a SIEM (Splunk) and a vulnerable web server. Quick deployment via Docker, attack simulation, and event monitoring/analysis with Splunk.
 
 # Architecture
 
@@ -16,21 +16,27 @@ AutoSOC is a project aimed at providing a lab environment for security teams (Bl
 
 ### Installation
 
-1. Just clone the repo and launch the compose file in your terminal :
+(Optional) if Docker not installed, install it quickly:
 
-    ```bash
+```bash
+curl -fsSL "https://get.docker.com/" | sh
+```
+
+1. Clone the repo and launch the compose file:
+
+```bash
     git clone https://github.com/sp1der2/AutoSOC && cd AutoSOC && sudo docker compose up -d
-    ```
+```
 
 ## Usage
 
-- After deployment, access the Splunk interface at: `https://localhost:8888`
-- Credentials are available in the docker compose file.
+- Splunk interface: `https://localhost:8888`
+- Credentials in the docker compose file.
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+MIT License. See [LICENSE](LICENSE) for details.
 
 ---
 
-**Note**: This project is intended for educational and training purposes only. Do not use this lab on production systems.
+**Note**: Educational/training use only. Do not use on production systems.
