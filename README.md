@@ -12,7 +12,7 @@ AutoSOC is a project aimed at providing a lab environment for security teams (Bl
 2. **DVWA**: Vulnerable Web App.
 
 ## Requirements
-- Docker
+- Docker + Docker Compose
 
 ### Installation
 
